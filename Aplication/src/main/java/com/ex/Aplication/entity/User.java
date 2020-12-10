@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -25,25 +28,45 @@ public class User implements Serializable {
 	
 	private static final long serialVersionUID = -2056706461782174980L;
 
+	
+    static final String size = "No cumple las reglas del tamaño";
+    static final String blank = "No puede estar vacío";
+    static final String mail = "El format del correu electrònic és incorrecte";
+
+
+    
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO, generator="native")
 	@GenericGenerator(name="native", strategy="native")
 	private Long id;
 	
 	@Column
+	@NotBlank(message = blank)
+	@Size(min=5, max=8, message = size)
 	private String firstName;
+	
 	@Column
+	@NotBlank(message = blank)
 	private String lastName;
+	
 	@Column
+	@NotBlank(message = blank)
+	@Email(message = mail)
 	private String email;
+	
 	@Column
+	@NotBlank(message = blank)
 	private String username;
+	
 	@Column
+	@NotBlank(message = blank)
 	private String password;
 	
 	@Transient
+	@NotBlank(message = blank)
 	private String confirmPassword;
 	
+	@Size(min=1)
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles",
 			joinColumns=@JoinColumn(name="user_id"),
@@ -51,17 +74,15 @@ public class User implements Serializable {
 
 	private Set<Role> roles;
 
+	public User() {
+		super();
+	}
+	
 	public User(Long id) {
 		super();
 		this.id = id; 
 	}
 	
-	public User() {
-		super();
-	}
-	
-	
-
 	public Long getId() {
 		return id;
 	}
