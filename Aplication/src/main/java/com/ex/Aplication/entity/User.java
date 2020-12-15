@@ -63,7 +63,7 @@ public class User implements Serializable {
 	private String password;
 	
 	@Transient
-	@NotBlank(message = blank)
+	
 	private String confirmPassword;
 	
 	@Size(min=1)
