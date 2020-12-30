@@ -31,7 +31,7 @@ public class UserController {
 	@Autowired
 	RoleRepository roleRepository;
 	
-	@GetMapping("/")
+	@GetMapping({"/","/login"})
 	public String index() {
 		return "index";
 	}
@@ -132,7 +132,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/editUser/changePassword")
-	public ResponseEntity postEditUserChangePassword(@Valid @RequestBody ChangePasswordForm form, Errors errors) {
+	public ResponseEntity<String> postEditUserChangePassword(@Valid @RequestBody ChangePasswordForm form, Errors errors) {
 		try {		
 			if (errors.hasErrors()) {
 				   String result = errors.getAllErrors()

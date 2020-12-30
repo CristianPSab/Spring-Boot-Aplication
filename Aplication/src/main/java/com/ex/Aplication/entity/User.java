@@ -31,7 +31,7 @@ public class User implements Serializable {
 	
     static final String size = "No cumple las reglas del tamaño";
     static final String blank = "No puede estar vacío";
-    static final String mail = "El format del correu electrònic és incorrecte";
+    static final String mail = "El formato del correo electrónico es incorrecto";
 
 
     
@@ -83,6 +83,7 @@ public class User implements Serializable {
 		this.id = id; 
 	}
 	
+
 	public Long getId() {
 		return id;
 	}
