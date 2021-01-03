@@ -1,6 +1,7 @@
 package com.ex.Aplication.service;
 
 
+import com.ex.Aplication.Exception.UserNameDoNotFound;
 import com.ex.Aplication.dto.ChangePasswordForm;
 import com.ex.Aplication.entity.User;
 
@@ -14,7 +15,7 @@ public interface UserService {
 	
 	public User updateUser(User user)throws Exception;
 	
-	public void deleteUser(Long id) throws Exception;
+	public void deleteUser(Long id) throws UserNameDoNotFound;
 	
 	public User changePassword(ChangePasswordForm form) throws Exception;
 
