@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.ex.Aplication.Exception.CustomFieldValidationException;
 import com.ex.Aplication.Exception.UserNameDoNotFound;
 import com.ex.Aplication.dto.ChangePasswordForm;
 import com.ex.Aplication.entity.User;
@@ -57,7 +58,15 @@ public class UserController {
 				userService.createUser(user);
 				model.addAttribute("userForm", new User());
 				model.addAttribute("listTab","active");
-			}catch (Exception e){
+			}
+			catch (CustomFieldValidationException cfve){
+				result.rejectValue(cfve.getFieldName(), null, cfve.getMessage());
+				model.addAttribute("userForm", user);
+				model.addAttribute("formTab","active");
+				model.addAttribute("userList", userService.getAllUsers());
+				model.addAttribute("roles",roleRepository.findAll());
+			}
+			catch (Exception e){
 				model.addAttribute("formErrorMessage", e.getMessage());
 				model.addAttribute("userForm", user);
 				model.addAttribute("formTab","active");
