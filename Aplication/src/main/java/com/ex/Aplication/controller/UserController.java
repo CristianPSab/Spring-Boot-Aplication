@@ -1,5 +1,7 @@
 package com.ex.Aplication.controller;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.ex.Aplication.Exception.CustomFieldValidationException;
 import com.ex.Aplication.Exception.UserNameDoNotFound;
 import com.ex.Aplication.dto.ChangePasswordForm;
+import com.ex.Aplication.entity.Role;
 import com.ex.Aplication.entity.User;
 import com.ex.Aplication.repository.RoleRepository;
 import com.ex.Aplication.service.UserService;
@@ -36,6 +39,48 @@ public class UserController {
 	@GetMapping({"/","/login"})
 	public String index() {
 		return "index";
+	}
+	
+	@GetMapping("/signup")
+	public String signup(Model model) {
+		Role userRole = roleRepository.findByName("USER");
+		List<Role> roles = Arrays.asList(userRole);
+		model.addAttribute("userForm", new User());
+		model.addAttribute("roles",roles);
+		model.addAttribute("signup", true);
+		
+		return "user-form/user-signup";
+
+	}
+	
+	@PostMapping("/signup")	
+	public String postSignup(@Valid @ModelAttribute("userForm")User user, BindingResult result, ModelMap model)  {
+		Role userRole = roleRepository.findByName("USER");
+		List<Role> roles = Arrays.asList(userRole);
+		model.addAttribute("userForm", user);
+		model.addAttribute("roles",roles);
+		model.addAttribute("signup", true);
+		
+		if(result.hasErrors()) {
+			return "user-form/user-signup";
+		}else {
+			try  {
+				userService.createUser(user);
+				
+			}
+			catch (CustomFieldValidationException cfve){
+				result.rejectValue(cfve.getFieldName(), null, cfve.getMessage());
+				return "user-form/user-signup";
+			}
+			catch (Exception e){
+				model.addAttribute("formErrorMessage", e.getMessage());
+				return "user-form/user-signup";
+			}
+			
+			
+			return "index";
+			
+		}
 	}
 	
 	@GetMapping("/userForm") 
